@@ -1,0 +1,57 @@
+-- Tao database
+CREATE DATABASE QuanLyNhanSu;
+-- Su dung database QuanLyNhanSu
+USE QuanLyNhanSu;
+-- Tao bang hoc_sinh
+CREATE TABLE hoc_sinh(
+	id_hoc_sinh int,
+	ten_hoc_sinh nvarchar(50)
+);
+-- Xoa bang hoc_sinh
+DROP TABLE hoc_sinh;
+
+-- Tao bang nhan_vien
+-- id, ho, ten, nam sinh, dia chi, gioi tinh, luong, id phong ban
+CREATE TABLE nhan_vien(
+	id_nhan_vien int IDENTITY(1,1) PRIMARY KEY,
+	ho_nhan_vien nvarchar(25),
+	ten_nhan_vien nvarchar(20) NOT NULL,
+	nam_sinh date,
+	dia_chi nvarchar(50),
+	gioi_tinh bit,
+	luong decimal(16,4),
+	id_phong_ban int
+);
+
+-- Tao bang phong_ban
+CREATE TABLE phong_ban(
+	id_phong_ban int IDENTITY(1,1) PRIMARY KEY,
+	ten_phong_ban nvarchar(50) NOT NULL,
+	id_truong_phong int
+);
+
+-- Tao khoa ngoai id_phong_ban cua bang nhan_vien
+-- tham chieu toi phong_ban(id_phong_ban)
+ALTER TABLE nhan_vien
+ADD FOREIGN KEY(id_phong_ban) REFERENCES phong_ban(id_phong_ban);
+
+-- Tao bang du_an
+CREATE TABLE du_an(
+	id_du_an int IDENTITY(1,1) PRIMARY KEY,
+	ten_du_an nvarchar(50),
+	ngay_bat_dau date,
+	ngay_ket_thuc date
+);
+
+-- Tao bang quan_ly_du_an
+CREATE TABLE quan_ly_du_an(
+	id_du_an int,
+	id_nhan_vien int,
+	ngay_tham_gia date,
+	ngay_ket_thuc date,
+	so_gio decimal(6,2),
+	vai_tro nvarchar(30),
+	FOREIGN KEY(id_du_an) REFERENCES du_an(id_du_an),
+	FOREIGN KEY(id_nhan_vien) REFERENCES nhan_vien(id_nhan_vien),
+	PRIMARY KEY(id_du_an, id_nhan_vien)
+);
