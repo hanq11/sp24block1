@@ -1,0 +1,26 @@
+USE QuanLyNhanSu;
+-- Them cot email vao bang nhan_vien
+ALTER TABLE nhan_vien
+ADD email nvarchar(50);
+-- Xoa cot ho_nhan_vien trong bang nhan_vien
+ALTER TABLE nhan_vien
+DROP COLUMN ho_nhan_vien;
+-- Truy van du lieu bang nhan vien
+SELECT ten_nhan_vien, luong FROM nhan_vien;
+-- Them du lieu vao bang nhan vien
+INSERT INTO nhan_vien
+	(ten_nhan_vien, luong)
+VALUES
+	('Nguyen Van Nam', 1000);
+-- Them rang buoc check cho cot luong cua bang nhan_vien
+ALTER TABLE nhan_vien
+ADD CONSTRAINT CHK_LUONG_MIN
+CHECK(luong > 500);
+-- Them du lieu khong hop le vao bang nhan_vien
+INSERT INTO nhan_vien
+	(ten_nhan_vien, luong)
+VALUES
+	('Nguyen Van Ngoc', 400);
+-- Xoa Constraint check
+ALTER TABLE nhan_vien
+DROP CONSTRAINT CHK_LUONG_MIN;
