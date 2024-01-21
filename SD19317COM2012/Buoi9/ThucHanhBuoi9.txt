@@ -1,0 +1,56 @@
+-- Su dung CSDL QuanLyNhanSu
+USE QuanLyNhanSu;
+
+-- Truy van tat ca cac ban ghi cua bang nhan_vien
+SELECT * FROM nhan_vien;
+-- Truy van 2 cot ten_nhan_vien va dia_chi cua bang nhan_vien
+SELECT ten_nhan_vien, dia_chi FROM nhan_vien;
+
+-- Truy van tat ca lien quan den phong ban
+SELECT * FROM phong_ban;
+-- Truy van ten, ngay bat dau, ket thuc trong bang du an
+SELECT ten_du_an, ngay_bat_dau, ngay_ket_thuc FROM du_an;
+
+-- Nhan vien: ten_nhan_vien co dia chi la: dia_chi
+SELECT 
+	'Nhan vien: ' 
+	+ CAST(ten_nhan_vien AS varchar(20))
+	+ ' co dia chi la: ' 
+	+ CAST(dia_chi AS varchar(20)) AS 'Dia chi nhan vien'
+	FROM nhan_vien;
+-- Su dung DISTINCT de loai bo cac ban ghi giong nhau
+SELECT DISTINCT ten_nhan_vien FROM nhan_vien;
+
+-- Lay ra 3 ban ghi dau cua nhan vien, chi lay ten va nam sinh
+SELECT TOP 3 ten_nhan_vien, nam_sinh FROM nhan_vien;
+-- Lay ra 40% ban ghi dau tien cua bang nhan_vien
+SELECT TOP 40 PERCENT * FROM nhan_vien;
+
+-- Tim nhan vien co luong > 600
+SELECT * FROM nhan_vien 
+WHERE luong > 600;
+-- Tim nhan vien co luong > 1000 va gioi tinh la 1
+SELECT * FROM nhan_vien
+WHERE luong > 1000 AND gioi_tinh = 1;
+-- Tim nhan vien co dia_chi o lang la hoac ha noi
+SELECT * FROM nhan_vien
+WHERE dia_chi = 'lang la' OR dia_chi = 'ha noi';
+-- Tim nhan vien co gioi tinh khong phai la 1
+SELECT * FROM nhan_vien
+WHERE NOT gioi_tinh = 1;
+
+-- Tim nhan vien co dia chi bat dau bang chu ha
+SELECT * FROM nhan_vien
+WHERE dia_chi LIKE 'ha%';
+-- Tim nhan vien co ten dem la Van
+SELECT * FROM nhan_vien
+WHERE ten_nhan_vien LIKE '%Van%';
+-- Tim nhan vien co dia chi bat dau bang i hoac chu l
+SELECT * FROM nhan_vien
+WHERE dia_chi LIKE '[il]%';
+-- Tim nhan vien co dia chi khong bat dau bang chu i hoac l
+SELECT * FROM nhan_vien
+WHERE dia_chi LIKE '[^il]%';
+-- Tim nhan vien co ten la %u_
+SELECT * FROM nhan_vien
+WHERE ten_nhan_vien LIKE '%u_';

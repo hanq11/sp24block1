@@ -1,0 +1,65 @@
+-- Su dung db QuanLyNhanVien
+USE QuanLyNhanVien;
+
+-- Lay ra toan bo ban ghi trong bang nhan_vien
+SELECT * FROM nhan_vien;
+
+-- Chi lay ra ten va nam sinh cua bang nhan_vien
+SELECT ten_nhan_vien, nam_sinh FROM nhan_vien;
+
+-- Truy van hien thi tat ca cac thong tin cua phong_ban
+SELECT * FROM phong_ban;
+SELECT ten_du_an, ngay_bat_dau, ngay_ket_thuc FROM du_an;
+
+-- Truy van voi AS, thay doi ten cua cot khi truy van
+SELECT ten_nhan_vien AS 'Nhan vien'
+	, nam_sinh AS 'Nam sinh'
+FROM nhan_vien;
+-- Truy van voi AS, ghep chuoi~
+-- Nhan vien + ten_nhan_vien + sinh ngay + nam_sinh
+SELECT 'Nhan vien: ' 
+	+ CAST(ten_nhan_vien AS VARCHAR(20)) 
+	+ ' sinh ngay ' 
+	+ CAST(nam_sinh AS VARCHAR(20)) AS 'Ngay sinh nhan vien'
+FROM nhan_vien;
+
+-- Truy van ten nhan vien
+SELECT ten_nhan_vien FROM nhan_vien;
+-- Truy van voi distinct
+SELECT DISTINCT ten_nhan_vien FROM nhan_vien;
+
+-- Truy van 3 ban ghi dau tien cua bang nhan_vien;
+SELECT TOP 3 * FROM nhan_vien;
+-- Truy van ten_nhan_vien va nam_sinh cua 3 ban ghi dau tien trong bang nhan vien
+SELECT TOP 3 ten_nhan_vien, nam_sinh FROM nhan_vien;
+-- Truy van 40% ban ghi dau tien trong bang nhan vien
+SELECT TOP 40 PERCENT * FROM nhan_vien;
+
+-- Tim nhung nhan vien co luong > 1500 voi where
+SELECT * FROM nhan_vien
+WHERE luong > 1500;
+-- Tim nhung nhan vien co gioi tinh la 1 va dia chi tai ha noi
+SELECT * FROM nhan_vien
+WHERE gioi_tinh = 1 AND dia_chi = 'ha noi';
+-- Tim nhung nguoi co dia chi tai bac ninh hoac bac kan
+SELECT * FROM nhan_vien
+WHERE dia_chi = 'bac ninh' OR dia_chi = 'bac kan';
+-- Tim nhung nguoi co gioi tinh khong phai la 1
+SELECT * FROM nhan_vien
+WHERE NOT gioi_tinh = 1; 
+
+-- Truy van ten_nhan_vien co chua tu Van
+SELECT * FROM nhan_vien
+WHERE ten_nhan_vien LIKE '%van%';
+-- Truy van ten_nhan_vien co chua tu Nguyen o dau
+SELECT * FROM nhan_vien
+WHERE ten_nhan_vien LIKE 'Nguyen%';
+-- Truy van ten nhan vien bat dau bang d hoac t
+SELECT * FROM nhan_vien
+WHERE ten_nhan_vien LIKE '[dt]%';
+-- Truy van ten nhan khong duoc bat dau bang d hoac t
+SELECT * FROM nhan_vien
+WHERE ten_nhan_vien LIKE '[^dt]%';
+-- Truy van ten nhan vien co chu Na trong ten
+SELECT * FROM nhan_vien
+WHERE ten_nhan_vien LIKE '%Na_';
