@@ -1,0 +1,37 @@
+CREATE DATABASE QuanLyMonHoc;
+
+USE QuanLyMonHoc;
+
+CREATE TABLE TroGiang(
+	MaTroGiang int PRIMARY KEY IDENTITY(1,1),
+	TenTroGiang nvarchar(50) NOT NULL,
+	Email nvarchar(50),
+	SoDienThoai varchar(20),
+	NgaySinh date
+);
+
+CREATE TABLE MonHoc(
+	MaMonHoc int PRIMARY KEY IDENTITY(1,1),
+	MaGiangVien int,
+	TenMonHoc nvarchar(50),
+	SoTinChi int
+);
+
+CREATE TABLE BuoiTroGiang(
+	MaBuoiTroGiang int PRIMARY KEY IDENTITY(1,1),
+	MaMonHoc int,
+	MaTroGiang int,
+	SoThuTu int,
+	FOREIGN KEY(MaMonHoc) REFERENCES MonHoc(MaMonHoc),
+	FOREIGN KEY(MaTroGiang) REFERENCES TroGiang(MaTroGiang)
+);
+
+CREATE TABLE GiangVien(
+	MaGiangVien int PRIMARY KEY IDENTITY(1,1),
+	TenGiangVien nvarchar(50),
+	Email nvarchar (50),
+	SoDienThoai varchar(20) 
+);
+
+ALTER TABLE MonHoc
+ADD FOREIGN KEY(MaGiangVien) REFERENCES GiangVien(MaGiangVien);
