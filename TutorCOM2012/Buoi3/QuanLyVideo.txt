@@ -1,0 +1,47 @@
+CREATE DATABASE QuanLyVideo;
+
+USE QuanLyVideo;
+
+CREATE TABLE NguoiDung(
+	MaNguoiDung int IDENTITY(1,1) PRIMARY KEY,
+	Ten nvarchar(50),
+	Email nvarchar(50)
+);
+
+CREATE TABLE Video(
+	MaVideo int IDENTITY(1,1) PRIMARY KEY,
+	MaNguoiDung int,
+	TieuDe nvarchar(50),
+	MoTa nvarchar(50),
+	FOREIGN KEY(MaNguoiDung) REFERENCES NguoiDung(MaNguoiDung)
+);
+
+CREATE TABLE BinhLuan(
+	MaBinhLuan int IDENTITY(1,1) PRIMARY KEY,
+	MaNguoiDung int,
+	MaVideo int,
+	FOREIGN KEY(MaNguoiDung) REFERENCES NguoiDung(MaNguoiDung),
+	FOREIGN KEY(MaVideo) REFERENCES Video(MaVideo)
+);
+
+CREATE TABLE LuotThich(
+	MaLuotThich int IDENTITY(1,1) PRIMARY KEY,
+	MaNguoiDung int,
+	MaVideo int,
+	FOREIGN KEY(MaNguoiDung) REFERENCES NguoiDung(MaNguoiDung),
+	FOREIGN KEY(MaVideo) REFERENCES Video(MaVideo)
+);
+
+CREATE TABLE DanhSachPhat(
+	MaDanhSach int IDENTITY(1,1) PRIMARY KEY,
+	NoiDung nvarchar(200),
+	NgayDang date
+);
+
+CREATE TABLE VideoDanhSach(
+	MaVideo int,
+	MaDanhSach int,
+	FOREIGN KEY(MaVideo) REFERENCES Video(MaVideo),
+	FOREIGN KEY(MaDanhSach) REFERENCES DanhSachPhat(MaDanhSach),
+	PRIMARY KEY(MaVideo, MaDanhSach)
+);
