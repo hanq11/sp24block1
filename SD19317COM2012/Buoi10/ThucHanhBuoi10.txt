@@ -1,0 +1,72 @@
+USE QuanLyNhanSu;
+
+-- MAX() tim gia tri lon nhat trong cot
+SELECT MAX(luong) FROM nhan_vien;
+-- MIN() tim gia nho nhat trong cot
+SELECT MIN(luong) FROM nhan_vien;
+-- AVG() tim trung binh cong cua cot
+SELECT AVG(luong) FROM nhan_vien;
+-- SUM() tinh tong gia tri trong cot
+SELECT SUM(luong) FROM nhan_vien;
+-- COUNT() dem so hang 
+SELECT COUNT(*) FROM nhan_vien;
+
+-- Tim luong trung binh cua cac nhan vien thuoc phong 2
+SELECT AVG(luong) AS 'Luong trung binh'
+FROM nhan_vien
+WHERE id_phong_ban = 2;
+
+-- Hien thi so luong du an co ngay ket thuc truoc nam 2026
+SELECT COUNT(*) FROM du_an
+WHERE ngay_ket_thuc < '2026-01-01';
+
+-- Dem so luong nhan vien trong moi phong
+SELECT id_phong_ban, COUNT(*) AS 'So luong nhan vien'
+FROM nhan_vien
+GROUP BY id_phong_ban;
+
+-- Tim luong lon nhat theo phong ban
+SELECT id_phong_ban, MAX(luong) AS 'Luong lon nhat'
+FROM nhan_vien
+GROUP BY id_phong_ban;
+-- Tim luong lon nhat theo phong ban,
+-- Nhung chi hien thi nhung luong lon nhat > 600
+SELECT id_phong_ban, MAX(luong) AS 'Luong lon nhat'
+FROM nhan_vien
+GROUP BY id_phong_ban
+HAVING MAX(luong) > 600;
+-- Tinh luong trung binh cua tung phong ban
+SELECT id_phong_ban, AVG(luong) AS 'Luong trung binh'
+FROM nhan_vien
+GROUP BY id_phong_ban;
+-- Tinh tong luong cong ty phai tra cho phong ban
+-- Chi hien thi nhom nao co luong > 1500
+SELECT id_phong_ban, SUM(luong) AS 'Tong luong'
+FROM nhan_vien
+GROUP BY id_phong_ban
+HAVING SUM(luong) > 1500;
+-- Tinh tong luong cong ty phai tra cho phong ban
+-- Chi nhom hang nao co cot luong > 1000
+-- Chi hien thi nhom nao co luong > 1500
+SELECT id_phong_ban, SUM(luong) AS 'Tong luong'
+FROM nhan_vien
+WHERE luong > 1000
+GROUP BY id_phong_ban
+HAVING SUM(luong) > 1500;
+-- Sap xep bang nhan vien tang dan theo ten
+SELECT * FROM nhan_vien
+ORDER BY ten_nhan_vien;
+-- Hien thi ten, ngay bat dau, ngay ket thuc cua du an
+SELECT ten_du_an, ngay_bat_dau, ngay_ket_thuc 
+FROM du_an
+ORDER BY ngay_ket_thuc DESC;
+-- Hien thi ma phong ban va luong trung binh tuong ung tung phong,
+-- chi lay cac hang co muc luong tren 500, 
+-- chi hien thi cac phong co luong trung binh tren 700 
+-- va sap xep theo thu tu giam dan theo cot phong
+SELECT id_phong_ban, AVG(luong) AS 'Luong trung binh'
+FROM nhan_vien
+WHERE luong > 500
+GROUP BY id_phong_ban
+HAVING AVG(luong) > 700
+ORDER BY id_phong_ban DESC;
