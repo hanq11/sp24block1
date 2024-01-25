@@ -1,0 +1,64 @@
+USE QuanLyNhanSu;
+
+-- Rut ra ten nhan vien va ten phong ban tuong ung
+SELECT 
+	nv.ten_nhan_vien, pb.ten_phong_ban
+FROM 
+	nhan_vien AS nv, phong_ban AS pb
+WHERE
+	nv.id_phong_ban = pb.id_phong_ban
+-- Noi 3 bang nhan vien, du an, quan ly du an
+SELECT 
+	nv.ten_nhan_vien, da.ten_du_an, 
+	qlda.ngay_tham_gia, qlda.ngay_ket_thuc, qlda.so_gio
+FROM nhan_vien AS nv, du_an AS da, quan_ly_du_an AS qlda
+WHERE 
+	(nv.id_nhan_vien = qlda.id_nhan_vien)
+	AND 
+	(da.id_du_an = qlda.id_du_an)
+-- Lay ra ten nhan vien, ten phong ban bang inner join
+SELECT nv.ten_nhan_vien, pb.ten_phong_ban
+FROM nhan_vien AS nv
+INNER JOIN phong_ban AS pb ON nv.id_phong_ban = pb.id_phong_ban;
+
+-- Sử dụng mệnh đề JOIN để hiển thị dữ liệu trong
+-- 3 bảng: NHAN_VIEN, DU_AN và QUANLY_DUAN
+SELECT 
+	nv.ten_nhan_vien, da.ten_du_an, 
+	qlda.ngay_tham_gia, qlda.ngay_ket_thuc, 
+	qlda.so_gio, qlda.vai_tro
+FROM nhan_vien AS nv
+INNER JOIN 
+	quan_ly_du_an AS qlda ON nv.id_nhan_vien = qlda.id_nhan_vien
+INNER JOIN 
+	du_an AS da ON da.id_du_an = qlda.id_du_an
+
+-- Sử dụng JOIN hoặc phép tích để hiển thị thông
+-- tin của 3 bảng gồm: họ và tên nhân viên, lương,
+-- tên phòng ban mà nhân viên thuộc về, tên dự
+-- án, ngày bắt đầu tham gia vào sự án và số giờ đã
+-- làm
+SELECT 
+	nv.ten_nhan_vien, nv.luong,
+	pb.ten_phong_ban, da.ten_du_an,
+	qlda.ngay_tham_gia, qlda.ngay_ket_thuc,
+	qlda.so_gio, qlda.vai_tro
+FROM nhan_vien AS nv
+INNER JOIN phong_ban AS pb ON nv.id_phong_ban = pb.id_phong_ban
+INNER JOIN quan_ly_du_an AS qlda ON nv.id_nhan_vien = qlda.id_nhan_vien
+INNER JOIN du_an AS da ON da.id_du_an = qlda.id_du_an;
+
+--Viết câu truy vấn hiển thị các thông tin bao gồm
+--họ, tên, lương của nhân viên, tên dự án với điều
+--kiện nhân viên thuộc phòng ban có tên ‘Thiết
+--kế’, tham gia vào các dự án có ngày bắt đầu
+--‘1/1/2016’
+SELECT nv.ten_nhan_vien, nv.luong, da.ten_du_an
+FROM nhan_vien AS nv
+INNER JOIN phong_ban AS pb ON nv.id_phong_ban = pb.id_phong_ban
+INNER JOIN quan_ly_du_an AS qlda ON nv.id_nhan_vien = qlda.id_nhan_vien
+INNER JOIN du_an AS da ON da.id_du_an = qlda.id_du_an
+WHERE
+	pb.ten_phong_ban = 'Kinh te'
+	AND
+	da.ngay_bat_dau = '2017-03-04';
