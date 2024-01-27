@@ -1,0 +1,91 @@
+USE QuanLyNhanSu;
+
+SELECT * FROM nhan_vien;
+-- INNER JOIN - Trả về tất cả các bản ghi có phần trung tại cả 2 bảng
+SELECT nv.ten_nhan_vien, pb.ten_phong_ban
+FROM nhan_vien nv
+INNER JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban;
+-- LEFT JOIN - Trả về tất cả các bản ghi ở bảng bên trái, nếu bảng bên phải không có bản ghi tương ứng, thì trả về NULL
+SELECT nv.ten_nhan_vien, pb.ten_phong_ban
+FROM nhan_vien nv
+LEFT JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban;
+-- RIGHT JOIN - Trả về tất cả các bản ghi ở bảng bên phải, nếu bảng bên trái không có bản ghi tương ứng, thì trả về NULL
+SELECT nv.ten_nhan_vien, pb.ten_phong_ban
+FROM nhan_vien nv
+RIGHT JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban;
+-- FULL OUTER JOIN - Trả về tất cả bản ghi ở cả hai bảng, nếu bản ghi ở 1 trong 2 bảng không tồn tại bản ghi tương ứng, thì trả về NULL
+SELECT nv.ten_nhan_vien, pb.ten_phong_ban
+FROM nhan_vien nv
+FULL OUTER JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban;
+
+-- In ra ten nhan vien, va ten nguoi quan ly
+SELECT b.ten_nhan_vien, a.ten_nhan_vien AS 'Ten nguoi quan ly'
+FROM nhan_vien a
+INNER JOIN nhan_vien b ON a.id_nhan_vien = b.id_quan_ly
+
+-- In ra tat ca ten nhan vien, va ten nguoi quan ly
+SELECT b.ten_nhan_vien, a.ten_nhan_vien AS 'Ten nguoi quan ly'
+FROM nhan_vien a
+RIGHT JOIN nhan_vien b ON a.id_nhan_vien = b.id_quan_ly
+
+-- Dung subquery, truy van tat ca nhung nhan vien co muc luong 
+-- cao hon muc luong trung binh toan cong ty
+SELECT *
+FROM nhan_vien nv
+WHERE nv.luong > (
+	SELECT AVG(luong)
+	FROM nhan_vien
+);
+-- Tim tat ca nhan vien trong phong ban co ten LIKE %a%
+SELECT id_phong_ban FROM phong_ban pb
+WHERE pb.ten_phong_ban LIKE '%a%';
+
+SELECT *
+FROM nhan_vien nv
+WHERE nv.id_phong_ban IN (
+	SELECT id_phong_ban FROM phong_ban pb
+	WHERE pb.ten_phong_ban LIKE '%a%'
+);
+
+SELECT *
+FROM nhan_vien nv
+WHERE nv.id_phong_ban IN (1,4);
+
+SELECT *
+FROM nhan_vien nv
+WHERE nv.id_phong_ban = 1 OR nv.id_phong_ban = 4;
+
+-- Tim ra nhan vien co luong lon hon bat ky luong cua nhan vien nao
+-- co phong ban la Kinh Te
+SELECT *
+FROM nhan_vien
+WHERE luong > ANY (
+	SELECT luong
+	FROM nhan_vien nv
+	INNER JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban
+	WHERE pb.ten_phong_ban = 'Kinh te'
+);
+-- Truy van tat ca nhan vien ton tai id phong ban
+-- Lấy ra tất cả những nhân viên mà tồn tại bản ghi có id_phong_ban tại bảng nhân viên của nhân viên đó
+-- tương ứng với id_phong_ban tại bảng phong_ban
+SELECT *
+FROM nhan_vien nv
+WHERE EXISTS (
+	SELECT *
+	FROM phong_ban pb 
+	WHERE nv.id_phong_ban = pb.id_phong_ban
+);
+--Viết câu truy vấn để hiển thị thông tin gồm mã
+--nhân viên, họ tên, lương của nhân viên đã tham
+--gia hơn 1 dự án
+SELECT nv.ten_nhan_vien, nv.luong, COUNT(qlda.id_du_an) AS 'So du an da lam'
+FROM nhan_vien nv
+INNER JOIN quan_ly_du_an qlda ON nv.id_nhan_vien = qlda.id_nhan_vien
+GROUP BY nv.ten_nhan_vien, nv.luong
+HAVING COUNT(qlda.id_du_an) > 1
+--Viết câu truy vấn để hiển thị tổng số giờ đã làm
+--trong các dự án của mỗi Nhân viên
+SELECT nv.ten_nhan_vien,  SUM(qlda.so_gio) AS 'So gio da lam'
+FROM nhan_vien nv
+INNER JOIN quan_ly_du_an qlda ON nv.id_nhan_vien = qlda.id_nhan_vien
+GROUP BY nv.ten_nhan_vien
