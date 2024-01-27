@@ -1,0 +1,82 @@
+USE QuanLyNhanVien;
+
+SELECT * FROM nhan_vien;
+SELECT * FROM phong_ban;
+-- INNER JOIN - Chi xuat hien nhung ban ghi co trung khoa trung gian
+SELECT * 
+FROM nhan_vien nv
+INNER JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban;
+-- LEFT JOIN - Xuat hien tat ca nhung ban ghi o bang ben trai, neu bang ben phai khong co ban ghi nao duoc noi', thi se hien null
+SELECT * 
+FROM nhan_vien nv
+LEFT JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban;
+-- RIGHT JOIN - Xuat hien tat ca nhung ban ghi o bang ben phai, neu bang ben trai khong co ban ghi nao duoc noi', thi se hien null
+SELECT * 
+FROM nhan_vien nv
+RIGHT JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban;
+-- FULL OUTER JOIN = LEFT JOIN + RIGHT JOIN
+SELECT * 
+FROM nhan_vien nv
+FULL OUTER JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban;
+
+-- Hien thi ten nhan vien va phong ban, right join
+SELECT nv.ten_nhan_vien, pb.ten_phong_ban
+FROM phong_ban pb
+RIGHT JOIN nhan_vien nv ON pb.id_phong_ban = nv.id_phong_ban;
+
+-- Hien thi ten nhan vien va ten nguoi quan ly
+SELECT a.ten_nhan_vien , b.ten_nhan_vien AS 'Ten nhan vien quan ly'
+FROM nhan_vien a
+INNER JOIN nhan_vien b ON b.id_nhan_vien = a.id_quan_ly
+-- Hien thi ten tat ca nhan vien, va nguoi quan ly neu co
+SELECT a.ten_nhan_vien , b.ten_nhan_vien AS 'Ten nhan vien quan ly'
+FROM nhan_vien a
+LEFT JOIN nhan_vien b ON b.id_nhan_vien = a.id_quan_ly
+-- Viet subquery hien thi cac nhan vien co luong trung binh
+-- lon hon trung binh luong toan cong ty
+SELECT * 
+FROM nhan_vien
+WHERE luong > (SELECT AVG(luong) FROM nhan_vien);
+-- Truy van nhan vien thuoc ten phong ban co ten LIKE '%a%'
+SELECT nv.ten_nhan_vien
+FROM nhan_vien nv 
+WHERE nv.id_phong_ban IN(
+	SELECT pb.id_phong_ban
+	FROM phong_ban pb
+	WHERE pb.ten_phong_ban LIKE '%a%'
+);
+-- Truy van nhan vien co luong lon hon bat ky nhan vien nao thuoc
+-- phong ban Hanh Chinh
+SELECT *
+FROM nhan_vien nv
+WHERE nv.luong > ANY (
+	SELECT luong
+	FROM nhan_vien nv
+	INNER JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban
+	WHERE pb.ten_phong_ban = 'Hanh Chinh'
+)
+-- Su dung exists, in ra tat ca nhan vien co id phong ban
+-- nam trong bang phong ban
+SELECT *
+FROM nhan_vien nv
+WHERE EXISTS (
+	SELECT *
+	FROM phong_ban pb
+	WHERE pb.id_phong_ban = nv.id_phong_ban
+)
+SELECT * FROM nhan_vien
+--Viết câu truy vấn để hiển thị thông tin gồm mã
+--nhân viên, họ tên, lương của nhân viên đã tham
+--gia hơn 5 dự án
+SELECT nv.ten_nhan_vien, COUNT(qlda.id_du_an) AS 'So du an', nv.luong
+FROM nhan_vien nv
+INNER JOIN quan_ly_du_an qlda ON nv.id_nhan_vien = qlda.id_nhan_vien
+GROUP BY nv.ten_nhan_vien, nv.luong
+HAVING COUNT(qlda.id_du_an) > 1
+--Viết câu truy vấn để hiển thị tổng số giờ đã làm
+--trong các dự án của mỗi Nhân viên
+SELECT nv.ten_nhan_vien, SUM(qlda.so_gio) AS 'Tong so gio', nv.luong
+FROM nhan_vien nv
+INNER JOIN quan_ly_du_an qlda ON nv.id_nhan_vien = qlda.id_nhan_vien
+GROUP BY nv.ten_nhan_vien, nv.luong
+
