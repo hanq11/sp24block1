@@ -1,0 +1,89 @@
+USE QuanLyMonHoc;
+
+-- Thêm vào mỗi bảng 5 bản ghi
+INSERT INTO GiangVien
+	(TenGiangVien, Email, SoDienThoai)
+VALUES 
+	('Nguyen Quang Ha', 'hanq5@fe.edu.vn', '0123456'),
+	('Nguyen Van A', 'Abc@fe.edu.vn', '345365'),
+	('Nguyen Thi B', 'bbb@fe.edu.vn', '23423'),
+	('Vu Van C', 'ccc@fe.edu.vn', '373557'),
+	('Tran Thi D', 'dddd@fe.edu.vn', '234235');
+-- Truy van tat ca ban ghi cua bang GiangVien
+SELECT * FROM GiangVien; 
+
+-- Them vao bang TroGiang 5 ban ghi
+INSERT INTO TroGiang
+	(TenTroGiang, Email, SoDienThoai, NgaySinh)
+VALUES
+	(N'Nguyễn Minh Hà', 'NTMA@gmail.com', '324235', '2005-01-05'),
+	(N'Nguyễn Thị Mai Anh', 'NTMA@gmail.com', '324235', '2005-01-05'),
+	(N'Trần Minh Vũ', 'TMV@gmail.com', '56755', '2003-03-05'),
+	(N'Lê Thị La', 'LTL@gmail.com', '453478', '2004-04-02'),
+	(N'Tống Thị Lê', 'hehe@gmail.com', '079458', '2005-04-06')
+-- Truy vấn toàn bộ bảng TroGiang
+SELECT * FROM TroGiang;
+
+-- Them vao bang MonHoc 5 ban ghi
+INSERT INTO MonHoc
+	(MaGiangVien, TenMonHoc, SoTinChi)
+VALUES
+	(1, N'Cơ sở dữ liệu', 3),
+	(3, N'Java 1', 4),
+	(2, N'Java 2', 4),
+	(4, N'Vovinam', 3),
+	(5, N'C#', 3)
+-- Truy vấn tất cả bản ghi của bảng MonHoc
+SELECT * FROM MonHoc;
+-- Them 5 ban ghi vao buoi tro giang
+INSERT INTO BuoiTroGiang
+	(MaMonHoc, MaTroGiang, SoThuTu)
+VALUES
+	(1, 2, 1),
+	(2, 1, 3),
+	(3, 3, 4),
+	(5, 5, 2),
+	(4, 4, 4);
+SELECT * FROM BuoiTroGiang;
+
+-- Them cot NgaySinh co kieu du lieu date vao bang GiangVien
+ALTER TABLE GiangVien
+ADD NgaySinh date;
+-- Thay doi cot NgaySinh cua bang GiangVien tu Null -> Not Null
+ALTER TABLE GiangVien
+ALTER COLUMN NgaySinh date NOT NULL;
+-- Xoa cot NgaySinh trong bang GiangVien
+ALTER TABLE GiangVien
+DROP COLUMN NgaySinh;
+SELECT * FROM GiangVien;
+-- In ra tat ca ban ghi cua bang MonHoc
+SELECT * FROM MonHoc;
+-- In ra tat ca mon hoc co chua chu a trong ten
+SELECT * FROM MonHoc
+WHERE TenMonHoc LIKE '%va%';
+-- In ra mon hoc co so tin chi lon hon 5
+SELECT * FROM MonHoc
+WHERE SoTinChi > 5;
+-- In ra ma va ten Giang vien, va ten nhung mon hoc giang vien
+-- do giang day
+SELECT gv.MaGiangVien, gv.TenGiangVien, mh.TenMonHoc
+FROM GiangVien AS gv
+INNER JOIN MonHoc AS mh ON gv.MaGiangVien = mh.MaGiangVien;
+-- Doi TenMonHoc co MaMonHoc = 2 thanh Java3
+UPDATE MonHoc
+SET
+	TenMonHoc = 'Java 3'
+WHERE
+	MaMonHoc = 2;
+-- In ra ten giang vien giang mon hoc co ma mon hoc la 1
+SELECT gv.TenGiangVien
+FROM GiangVien AS gv
+INNER JOIN MonHoc AS mh ON gv.MaGiangVien = mh.MaGiangVien
+WHERE mh.MaMonHoc = 1;
+-- Chỉnh sửa tên giảng viên (dạy môn học có mã môn học là ‘1’) thành ‘DungNA29’.
+UPDATE GiangVien
+SET
+	TenGiangVien = 'DungNA29'
+FROM GiangVien AS gv
+INNER JOIN MonHoc AS mh ON gv.MaGiangVien = mh.MaGiangVien
+WHERE mh.MaMonHoc = 1;
