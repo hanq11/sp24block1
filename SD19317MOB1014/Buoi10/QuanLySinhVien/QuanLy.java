@@ -130,11 +130,13 @@ public class QuanLy {
         Scanner sc = new Scanner(System.in);
         System.out.print("Vui long nhap Ten sinh vien muon xoa: ");
         String tenMuonTim = sc.nextLine();
+        ArrayList<SinhVien> danhSachCanXoa = new ArrayList<SinhVien>();
         for(SinhVien sv: danhSachSV) {
             if(sv.getHoTen().contains(tenMuonTim)) {
-                danhSachSV.remove(sv);
+                danhSachCanXoa.add(sv);
             }
         }
+        danhSachSV.removeAll(danhSachCanXoa);
     }
 
     public static void sortTheoDiem(ArrayList<SinhVien> danhSachSV) {

@@ -123,12 +123,13 @@ public class QuanLySinhVien {
         Scanner sc = new Scanner(System.in);
         System.out.print("Vui long nhap ho ten can xoa: ");
         String hoTenCanTim = sc.nextLine();
-
+        ArrayList<SinhVien> danhSachCanXoa = new ArrayList<SinhVien>();
         for (SinhVien sv : danhSachSV) {
             if(sv.getHoTen().contains(hoTenCanTim)) {
                 // System.out.printf("Xoa thanh cong sinh vien co ten la: %s\n", sv.getHoTen());
-                danhSachSV.remove(sv);
+                danhSachCanXoa.add(sv);
             }
         }
+        danhSachSV.removeAll(danhSachCanXoa);
     }
 }
