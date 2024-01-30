@@ -39,4 +39,15 @@ WHERE mh.SoTinChi = (SELECT MIN(SoTinChi) FROM MonHoc);
 SELECT gv.TenGiangVien, COUNT(mh.TenMonHoc)
 FROM MonHoc mh
 INNER JOIN GiangVien gv ON mh.MaGiangVien = gv.MaGiangVien
-GROUP BY gv.TenGiangVien
+GROUP BY gv.MaGiangVien, gv.TenGiangVien
+
+SELECT gv.MaGiangVien, gv.TenGiangVien, mh.TenMonHoc
+FROM MonHoc mh
+INNER JOIN GiangVien gv ON mh.MaGiangVien = gv.MaGiangVien
+-- Hiển thị số môn học của từng giảng viên sắp xếp giảm dần theo mã giảng viên
+SELECT gv.MaGiangVien, gv.TenGiangVien, COUNT(mh.TenMonHoc)
+FROM MonHoc mh
+INNER JOIN GiangVien gv ON mh.MaGiangVien = gv.MaGiangVien
+GROUP BY gv.MaGiangVien, gv.TenGiangVien
+ORDER BY gv.MaGiangVien DESC
+
