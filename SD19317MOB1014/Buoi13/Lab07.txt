@@ -1,0 +1,5 @@
+Tạo class SinhVien bao gồm các thuộc tính tên và điểm, private các thuộc tính và có đầy đủ getter setter, tạo hai hàm tạo (có 1 tham số truyền vào và 2 cả tham số truyền vào) 
++ Tạo menu có các mục sau: (Sự lựa chọn được lặp lại đến khi chọn 0)
+	1. Nhập danh sách sinh viên: mỗi khi nhập xong 1 sinh viên thì hỏi có muốn nhập tiếp hay không
+	2. Sắp sếp sinh viên theo tên giảm dần
+	3. Tìm sinh viên có tên chứa chữ Hoa và điểm lớn hơn 6, xuất tên in hoa
