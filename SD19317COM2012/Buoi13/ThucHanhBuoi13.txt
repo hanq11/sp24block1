@@ -1,0 +1,46 @@
+USE QuanLyNhanSu;
+
+SELECT * FROM nhan_vien;
+-- Truy van voi truong NULL
+SELECT * FROM nhan_vien
+WHERE id_phong_ban IS NULL
+SELECT * FROM nhan_vien
+WHERE email IS NULL
+SELECT * FROM nhan_vien
+WHERE email = ''
+-- SELECT INTO
+SELECT id_nhan_vien, ten_nhan_vien INTO nhan_vien_moi
+FROM nhan_vien
+SELECT * FROM nhan_vien_moi
+--Viết câu lệnh tạo ra 1 bảng mới có tên
+--DUAN_2016 lấy dữ liệu từ bảng DUAN có
+--ngày kết thúc trong năm 2016
+SELECT * FROM du_an
+WHERE ('2024-01-01' <= ngay_ket_thuc) AND (ngay_ket_thuc <= '2024-12-31')
+SELECT * FROM du_an
+WHERE ngay_ket_thuc BETWEEN '2024-01-01' AND '2024-12-31'
+
+SELECT ten_du_an, ngay_bat_dau, ngay_ket_thuc INTO du_an_moi
+FROM du_an
+WHERE ngay_ket_thuc BETWEEN '2024-01-01' AND '2024-12-31'
+
+SELECT * FROM du_an_moi
+-- INSERT INTO
+SELECT * FROM phong_ban
+-- Dữ liệu có dấu, trường dữ liệu phải là nvarchar, thêm N vào trước chuỗi
+INSERT INTO phong_ban 
+	(ten_phong_ban, id_truong_phong)
+VALUES
+	('Bao ve', 5),
+	(N'May mặc', 4),
+	('Kế toán', 7)
+-- INSERT INTO voi SELECT
+CREATE TABLE phong_ban_moi(
+	id_phong_ban int,
+	ten_phong_ban nvarchar(50)
+)
+
+SELECT * FROM phong_ban_moi
+
+INSERT INTO phong_ban_moi(id_phong_ban, ten_phong_ban)
+SELECT id_phong_ban, ten_phong_ban FROM phong_ban

@@ -1,0 +1,53 @@
+USE QuanLyMonHoc;
+
+INSERT INTO GiangVien
+	(TenGiangVien, Email, SoDienThoai)
+VALUES
+	(N'Nguyễn Thị A', 'ANT@fe.edu.vn', '234894');
+
+-- Lay ra tat ca ban ghi cua bang GiangVien
+SELECT * FROM GiangVien
+-- Xoa ban ghi cua bang GiangVien theo MaGiangVien
+DELETE
+FROM GiangVien
+WHERE MaGiangVien = 7;
+-- Lay ra tat ca ban ghi cua bang Tro Giang va Buoi Tro Giang
+SELECT * FROM TroGiang;
+SELECT * FROM BuoiTroGiang;
+-- Sua MaTroGiang cua BuoiTroGiang theo MaBuoiTroGiang
+UPDATE BuoiTroGiang
+SET MaTroGiang = 1
+WHERE MaBuoiTroGiang = 1
+-- Lay ra tat ca nhung MaTroGiang xuat hien trongbang BuoiTroGiang
+SELECT DISTINCT MaTroGiang FROM BuoiTroGiang;
+-- Xoa cac tro giang khong ho tro giang day mon hoc nao
+-- Xóa các bản ghi của bảng TroGiang mà MaTroGiang của các bản ghi đó
+-- không nằm trong câu SELECT DISTINCT
+DELETE 
+FROM TroGiang
+WHERE MaTroGiang NOT IN (SELECT DISTINCT MaTroGiang FROM BuoiTroGiang);
+-- Sap xep mon hoc giam dan theo tin chi
+SELECT * FROM MonHoc
+ORDER BY SoTinChi DESC;
+-- Lay ra so tin chi be nhat
+SELECT MIN(SoTinChi) FROM MonHoc;
+-- Lay ra mon hoc co it tin chi nhat
+SELECT mh.TenMonHoc, mh.SoTinChi
+FROM MonHoc mh
+WHERE mh.SoTinChi = (SELECT MIN(SoTinChi) FROM MonHoc);
+-- Hiển thị số môn học của từng giảng viên
+SELECT gv.TenGiangVien, COUNT(mh.TenMonHoc)
+FROM MonHoc mh
+INNER JOIN GiangVien gv ON mh.MaGiangVien = gv.MaGiangVien
+GROUP BY gv.MaGiangVien, gv.TenGiangVien
+
+SELECT gv.MaGiangVien, gv.TenGiangVien, mh.TenMonHoc
+FROM MonHoc mh
+INNER JOIN GiangVien gv ON mh.MaGiangVien = gv.MaGiangVien
+-- Hiển thị số môn học của từng giảng viên sắp xếp giảm dần theo mã giảng viên
+SELECT gv.MaGiangVien, gv.TenGiangVien, COUNT(mh.TenMonHoc)
+FROM MonHoc mh
+INNER JOIN GiangVien gv ON mh.MaGiangVien = gv.MaGiangVien
+GROUP BY gv.MaGiangVien, gv.TenGiangVien
+ORDER BY gv.MaGiangVien DESC
+

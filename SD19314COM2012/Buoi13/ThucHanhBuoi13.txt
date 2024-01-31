@@ -1,0 +1,46 @@
+USE QuanLyNhanVien;
+-- Tim cac ban ghi co cot khong co gia tri
+SELECT * FROM nhan_vien
+WHERE email IS NULL
+SELECT * FROM nhan_vien
+WHERE id_phong_ban IS NULL
+
+SELECT * FROM nhan_vien
+WHERE email = ''
+-- Lay du lieu ten nhan vien, nam sinh bang nhan vien sang nhan vien test
+SELECT ten_nhan_vien, nam_sinh INTO nhan_vien_moi
+FROM nhan_vien
+SELECT * FROM nhan_vien_moi
+--Viết câu lệnh tạo ra 1 bảng mới có tên
+--DUAN_2016 lấy dữ liệu từ bảng DUAN có ngày
+--bắt đầu trong năm 2016
+SELECT * FROM du_an
+WHERE '2016-01-01' <= ngay_bat_dau AND ngay_bat_dau <= '2016-12-31'
+SELECT * FROM du_an
+WHERE ngay_bat_dau BETWEEN '2016-01-01' AND '2016-12-31'
+SELECT * INTO du_an_moi
+FROM du_an
+WHERE ngay_bat_dau BETWEEN '2016-01-01' AND '2016-12-31'
+SELECT * FROM du_an_moi
+-- Them 1 ban ghi moi vao bang phong_ban
+INSERT INTO phong_ban 
+	(ten_phong_ban, id_truong_phong) 
+VALUES 
+	('Ke Toan', 7),
+	(N'Dịch vụ', 8)
+-- Tao bang nhan_vien_moi_hon
+CREATE TABLE nhan_vien_moi_hon(
+	id_nhan_vien int,
+	ten_nhan_vien nvarchar(30)
+)
+-- Them ban ghi moi bang cau SELECT
+INSERT INTO nhan_vien_moi_hon(id_nhan_vien, ten_nhan_vien)
+SELECT id_nhan_vien, ten_nhan_vien FROM nhan_vien
+----------------
+SELECT * FROM nhan_vien_moi_hon
+-- Gõ tiếng việt: nvarchar, thêm N vào trước chuỗi
+SELECT * FROM phong_ban
+INSERT INTO phong_ban 
+	(ten_phong_ban, id_truong_phong) 
+VALUES 
+	(N'Kế Toán', 7)
