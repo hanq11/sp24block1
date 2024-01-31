@@ -1,0 +1,5 @@
+Tạo class NhanVien bao gồm các thuộc tính tên và lương, private các thuộc tính và có đầy đủ getter setter, tạo hai hàm tạo (có 1 tham số truyền vào và 2 cả tham số truyền vào) 
++ Tạo menu có các mục sau: (Sự lựa chọn được lặp lại đến khi chọn 0)
+	1. Nhập danh sách nhân viên: mỗi khi nhập xong 1 sinh viên thì hỏi có muốn nhập tiếp hay không
+	2. Sắp sếp nhân viên theo lương giảm dần
+	3. Tìm nhân viên có tên chứa chữ Hoa và lương lớn hơn 6, xuất tên in hoa
