@@ -1,0 +1,18 @@
+Tạo bảng mới CongTac bằng câu lệnh gồm:
+id_nhan_vien
+id_du_an
+ngay_bat_dau
+ngay_ket_thuc
+tro_cap_cong_tac
+
+Trường id_nhan_vien và id_du_an là khóa ngoài, tạo thành 1 cụm khóa chính
+Trường ngày bắt đầu không được để trống
+
+Thêm 3 bản ghi cho bảng CongTac bằng câu lệnh
+Tăng trợ cấp công tác của các nhân viên đi công tác trong tháng 2 lên 50
+Sửa ngày bắt đầu của bảng CongTac thành 2020-01-02 đối với các nhân viên có id là 1
+Xóa các bản ghi của bảng công tác đối với các nhân viên không có trợ cấp công tác
+Xóa các bản ghi của bảng công tác đối với các bản ghi có ngay_bat_dau trước năm 2016
+Viết câu lệnh lấy ra tất cả các bản ghi của bảng CongTac với điều kiện ngay_bat_dau trong năm 2020
+In ra tên nhân viên, tên dự án, ngày bắt đầu và ngày kết thúc của từng lần Công tác
+In ra tên nhân viên và số lần đi công tác của từng nhân viên

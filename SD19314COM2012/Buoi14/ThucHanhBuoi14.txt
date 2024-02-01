@@ -1,0 +1,88 @@
+USE QuanLyNhanVien;
+
+-- Lay ra tat ca Ten nhan vien va Ten phong ban
+SELECT nv.ten_nhan_vien, nv.luong, pb.ten_phong_ban
+FROM nhan_vien nv
+INNER JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban
+-- Tang luong cua nhan vien tai phong ban Hanh Chinh them 10%
+UPDATE nhan_vien
+SET luong = luong + luong * 0.1
+WHERE id_phong_ban = (
+	SELECT id_phong_ban
+	FROM phong_ban
+	WHERE ten_phong_ban LIKE '%chinh'
+)
+--
+SELECT * FROM nhan_vien
+UPDATE nhan_vien
+SET luong = 1100
+WHERE id_nhan_vien = 1
+-- Cập nhật lại lương cho các nhân viên có tham
+-- gia vào dự án có mã 1 lên 50$
+SELECT nv.ten_nhan_vien, nv.luong
+FROM nhan_vien nv
+INNER JOIN quan_ly_du_an qlda ON nv.id_nhan_vien = qlda.id_nhan_vien
+WHERE qlda.id_du_an = 1
+
+UPDATE nhan_vien
+SET luong = luong + 50
+WHERE id_nhan_vien IN (
+	SELECT nv.id_nhan_vien
+	FROM nhan_vien nv
+	INNER JOIN quan_ly_du_an qlda ON nv.id_nhan_vien = qlda.id_nhan_vien
+	WHERE qlda.id_du_an = 1
+)
+
+--Cập nhật lại cột mã trưởng phòng cho Phòng
+--ban có tên “San xuat 2” với giá trị mới là mã
+--nhân viên có tên “Le Hoang
+SELECT * FROM phong_ban
+SELECT * FROM nhan_vien
+
+UPDATE phong_ban
+SET id_truong_phong = (
+	SELECT id_nhan_vien
+	FROM nhan_vien
+	WHERE nhan_vien.ten_nhan_vien LIKE '%Thi Ngoc'
+)
+WHERE ten_phong_ban LIKE 'Nhan su'
+
+---
+SELECT * FROM du_an_moi
+-- Xoa ban ghi co ten_du_an chua chu 'tri' trong bang du_an_moi
+DELETE FROM du_an_moi
+WHERE ten_du_an LIKE '%tri%'
+--
+SELECT * FROM du_an
+
+INSERT INTO du_an (ten_du_an, ngay_bat_dau, ngay_ket_thuc)
+VALUES ('De xoa', '2030-12-12', '2030-12-13');
+
+-- Xoa cac du an co ngay bat dau va ket thuc sau ngay 2030-12-11
+DELETE FROM du_an
+WHERE ngay_bat_dau > '2030-12-11' AND ngay_ket_thuc > '2030-12-11'
+
+-- Xoa cac phong ban khong co nhan vien nao
+SELECT pb.id_phong_ban, COUNT(nv.id_nhan_vien)
+FROM nhan_vien nv
+RIGHT JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban
+GROUP BY pb.id_phong_ban
+HAVING COUNT(nv.id_nhan_vien) = 0
+-- Cach 1
+DELETE FROM phong_ban
+WHERE id_phong_ban IN (
+		SELECT pb.id_phong_ban
+		FROM nhan_vien nv
+		RIGHT JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban
+		GROUP BY pb.id_phong_ban
+		HAVING COUNT(nv.id_nhan_vien) = 0
+	)
+
+-- Cach 2
+DELETE FROM phong_ban
+WHERE id_phong_ban NOT IN (
+	SELECT DISTINCT id_phong_ban 
+	FROM nhan_vien 
+	WHERE id_phong_ban IS NOT NULL
+)
+
