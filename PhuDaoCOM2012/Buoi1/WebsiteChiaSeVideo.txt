@@ -1,0 +1,46 @@
+CREATE DATABASE WebsiteChiaSeVideo
+USE WebsiteChiaSeVideo
+
+CREATE TABLE NguoiDung(
+	MaNguoiDung int IDENTITY(1,1) PRIMARY KEY,
+	Ten nvarchar(50) NOT NULL,
+	Email nvarchar(100)
+)
+
+CREATE TABLE DanhSachPhat(
+	MaDanhSach int IDENTITY(1,1) PRIMARY KEY,
+	NoiDung nvarchar(200),
+	NgayDang date
+);
+
+CREATE TABLE Video(
+	MaVideo int IDENTITY(1,1) PRIMARY KEY,
+	MaNguoiDung int,
+	TieuDe nvarchar(100),
+	MoTa nvarchar(200),
+	FOREIGN KEY(MaNguoiDung) REFERENCES NguoiDung(MaNguoiDung)
+);
+
+CREATE TABLE LuotThich(
+	MaLuotThich int IDENTITY(1,1) PRIMARY KEY,
+	MaNguoiDung int,
+	MaVideo int,
+	FOREIGN KEY(MaNguoiDung) REFERENCES NguoiDung(MaNguoiDung),
+	FOREIGN KEY(MaVideo) REFERENCES Video(MaVideo)
+);
+
+CREATE TABLE BinhLuan(
+	MaBinhLuan int IDENTITY(1,1) PRIMARY KEY,
+	MaNguoiDung int,
+	MaVideo int,
+	FOREIGN KEY(MaNguoiDung) REFERENCES NguoiDung(MaNguoiDung),
+	FOREIGN KEY(MaVideo) REFERENCES Video(MaVideo)
+);
+
+CREATE TABLE VideoDanhSach(
+	MaVideo int,
+	MaDanhSach int,
+	FOREIGN KEY(MaVideo) REFERENCES Video(MaVideo),
+	FOREIGN KEY(MaDanhSach) REFERENCES DanhSachPhat(MaDanhSach),
+	PRIMARY KEY(MaVideo, MaDanhSach)
+);

@@ -1,0 +1,53 @@
+-- Khởi tạo CSDL QuanLyTruongHoc
+-- Cách chạy các câu lệnh:
+-- Bôi đen => Execute, F5, CTRL + E
+CREATE DATABASE QuanLyTruongHoc;
+-- Khai báo sử dụng CSDL
+USE QuanLyTruongHoc;
+
+-- Xoa bang Giang vien
+DROP TABLE GiangVien;
+
+ -- Tạo bảng GiangVien: MaGiangVien, TenGiangVien, Email, SoDienThoai
+CREATE TABLE GiangVien (
+	MaGiangVien int IDENTITY(1,1) PRIMARY KEY,
+	TenGiangVien nvarchar(50),
+	Email varchar(100),
+	SoDienThoai varchar(20)
+);
+-- Tạo bảng MonHoc: MaMonHoc, MaGiangVien, TenMonHoc, SoTinChi
+CREATE TABLE MonHoc (
+	MaMonHoc int IDENTITY(1,1) PRIMARY KEY,
+	MaGiangVien int,
+	TenMonHoc nvarchar(50),
+	SoTinChi int,
+	FOREIGN KEY(MaGiangVien) REFERENCES GiangVien(MaGiangVien)
+);
+-- Tạo bảng BuoiTroGiang: MaBuoiTroGiang, MaMonHoc, MaTroGiang, SoThuTu
+CREATE TABLE BuoiTroGiang (
+	MaBuoiTroGiang int IDENTITY(1,1) PRIMARY KEY,
+	MaMonHoc int,
+	MaTroGiang int,
+	SoThuTu int,
+	FOREIGN KEY(MaMonHoc) REFERENCES MonHoc(MaMonHoc)
+);
+-- Tạo bảng TroGiang: MaTroGiang, TenTroGiang, Email, SoDienThoai, NgaySinh
+CREATE TABLE TroGiang (
+	MaTroGiang int IDENTITY(1,1) PRIMARY KEY,
+	TenTroGiang nvarchar(50),
+	Email nvarchar(100),
+	SoDienThoai nvarchar(20),
+	NgaySinh date
+);
+-- Tạo khóa ngoài BuoiTroGiang(MaTroGiang) nối đến TroGiang(MaTroGiang)
+ALTER TABLE BuoiTroGiang
+ADD FOREIGN KEY(MaTroGiang) REFERENCES TroGiang(MaTroGiang);
+-- Thêm cột ngày sinh vào cho bảng GiangVien
+ALTER TABLE GiangVien
+ADD NgaySinh date;
+-- Xóa cột Email của bảng TroGiang
+ALTER TABLE TroGiang
+DROP COLUMN Email;
+-- Sửa cột GiangVien(TenGiangVien) từ NULLABLE -> NOT NULL
+ALTER TABLE GiangVien
+ALTER COLUMN TenGiangVien nvarchar(60) NOT NULL
