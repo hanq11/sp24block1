@@ -1,0 +1,82 @@
+USE QuanLyNhanSu;
+
+-- Viết câu lệnh cập nhật lại lương cho các
+-- nhân viên tăng lên 10% nếu nhân viên thuộc
+-- phòng ban có tên ‘Thiết kế’
+SELECT * FROM nhan_vien
+SELECT * FROM phong_ban
+
+UPDATE nhan_vien
+SET luong = luong + luong * 0.1
+WHERE id_phong_ban = (
+	SELECT pb.id_phong_ban
+	FROM nhan_vien nv
+	INNER JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban
+	WHERE pb.ten_phong_ban LIKE '%dung'
+)
+
+SELECT * FROM nhan_vien WHERE id_quan_ly IS NOT NULL
+UPDATE nhan_vien
+SET ten_nhan_vien = 'Nguyen Van Loc'
+WHERE id_quan_ly = 3
+
+--Cập nhật lại lương cho các nhân viên có tham
+--gia vào dự án có mã 1 lên 50$
+UPDATE nhan_vien
+SET luong = luong + 50
+WHERE id_nhan_vien IN (
+	SELECT nv.id_nhan_vien
+	FROM nhan_vien nv
+	INNER JOIN quan_ly_du_an qlda ON nv.id_nhan_vien = qlda.id_nhan_vien
+	WHERE qlda.id_du_an = 1
+)
+
+--Cập nhật lại cột mã trưởng phòng cho Phòng
+--ban có tên “Xay dung” với giá trị mới là mã
+--nhân viên có tên “Nguyen Khanh Toan”
+SELECT * FROM phong_ban
+SELECT * FROM nhan_vien
+
+UPDATE phong_ban
+SET id_truong_phong = (
+		SELECT nv.id_nhan_vien
+		FROM nhan_vien nv
+		WHERE nv.ten_nhan_vien LIKE '%Khanh%'
+	)
+WHERE phong_ban.ten_phong_ban LIKE 'Xay%'
+
+-- 
+SELECT * FROM nhan_vien_moi
+-- Xoa nhan vien trong bang nhan_vien_moi co ten chua tu 'Van'
+
+DELETE FROM nhan_vien_moi
+WHERE ten_nhan_vien LIKE '%Van%'
+
+-- Xoá các dự án có ngày bắt đầu và ngày kết thúc
+-- sau ngày ’2024-01-01’
+SELECT * FROM du_an_moi
+
+DELETE FROM du_an_moi
+WHERE ngay_bat_dau > '2024-01-01' AND ngay_ket_thuc > '2024-01-01'
+-- Xoá các Phòng ban không có nhân viên nào
+SELECT * FROM nhan_vien
+SELECT * FROM phong_ban
+
+DELETE FROM phong_ban
+WHERE id_phong_ban IN (
+	SELECT pb.id_phong_ban
+	FROM nhan_vien nv
+	RIGHT JOIN phong_ban pb ON nv.id_phong_ban = pb.id_phong_ban
+	GROUP BY pb.id_phong_ban
+	HAVING COUNT(nv.id_nhan_vien) = 0
+)
+
+INSERT INTO phong_ban(ten_phong_ban)
+VALUES ('De Xoa')
+
+DELETE FROM phong_ban
+WHERE id_phong_ban NOT IN (
+	SELECT DISTINCT id_phong_ban 
+	FROM nhan_vien
+	WHERE id_phong_ban IS NOT NULL
+)
