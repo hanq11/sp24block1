@@ -1,4 +1,4 @@
-Tạo bảng mới CongTac bằng câu lệnh gồm:
+Dựa vào CSLD thực hành trên lớp, Tạo bảng mới CongTac bằng câu lệnh gồm:
 id_nhan_vien
 id_du_an
 ngay_bat_dau
