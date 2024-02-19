@@ -1,0 +1,62 @@
+USE QuanLyTruongHoc;
+
+-- Hiển thị các bản ghi của bảng GiangVien
+SELECT * FROM GiangVien;
+-- Xóa GiangVien có MaGiangVien là 8          
+DELETE 
+FROM GiangVien
+WHERE MaGiangVien = 8;
+-- Lấy ra các bản ghi của bảng BuoiTroGiang
+SELECT * FROM BuoiTroGiang;
+-- Chỉ lấy MaTroGiang trong bảng BuoiTroGiang
+SELECT DISTINCT MaTroGiang FROM BuoiTroGiang;
+
+SELECT * FROM TroGiang;
+
+-- Xóa trợ giảng không trợ giảng BuoiTroGiang nào
+DELETE
+FROM TroGiang
+WHERE 
+	MaTroGiang NOT IN (SELECT DISTINCT MaTroGiang FROM BuoiTroGiang);
+-- Sắp xếp môn học giảm dần theo tín chỉ
+SELECT * FROM MonHoc
+ORDER BY SoTinChi DESC;
+-- Ascending - ASC - Tang dan
+-- Descending - DESC - Giam dan
+
+-- 
+SELECT * FROM MonHoc;
+-- Lấy ra SoTinChi thấp nhất
+-- Aggreate function
+-- MIN, MAX, COUNT, SUM, AVG
+SELECT MIN(SoTinChi) FROM MonHoc;
+-- Lấy ra môn học có số tín chỉ thấp nhất
+SELECT * FROM MonHoc
+WHERE SoTinChi = (SELECT MIN(SoTinChi) FROM MonHoc);
+--- Sự khác nhau giữa = và LIKE
+SELECT * FROM MonHoc
+WHERE TenMonHoc = N'Hệ Quản Trị CSDL';
+SELECT * FROM MonHoc
+WHERE TenMonHoc LIKE '%1';
+--
+SELECT * FROM MonHoc;
+SELECT * FROM GiangVien;
+-- Đếm số môn học của từng GiangVien
+SELECT gv.TenGiangVien, COUNT(mh.MaMonHoc)
+FROM MonHoc mh
+INNER JOIN GiangVien gv ON mh.MaGiangVien = gv.MaGiangVien
+GROUP BY gv.MaGiangVien, gv.TenGiangVien;
+-- 6.Hiển thị số môn học của từng giảng viên sắp xếp giảm dần theo mã giảng viên
+SELECT gv.TenGiangVien, COUNT(mh.MaMonHoc)
+FROM MonHoc mh
+INNER JOIN GiangVien gv ON mh.MaGiangVien = gv.MaGiangVien
+GROUP BY gv.MaGiangVien, gv.TenGiangVien
+ORDER BY gv.MaGiangVien DESC;
+-- Hiển thị số buổi trợ giảng của mỗi trợ giảng
+SELECT tg.MaTroGiang, tg.TenTroGiang, COUNT(btg.MaBuoiTroGiang) AS 'So Buoi tro giang'
+FROM BuoiTroGiang btg
+RIGHT JOIN TroGiang tg ON btg.MaTroGiang = tg.MaTroGiang
+GROUP BY tg.MaTroGiang, tg.TenTroGiang
+
+INSERT INTO TroGiang (TenTroGiang, SoDienThoai, NgaySinh)
+VALUES ('Nguyen Van A', '239843', '1999-12-12');
