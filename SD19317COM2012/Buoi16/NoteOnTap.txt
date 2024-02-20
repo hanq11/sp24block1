@@ -1,0 +1,31 @@
+-- CREATE TABLE - Tao bang
+	-- IDENTITY(1,1) - Dat id tang dan, bat dau tu 1
+	-- PRIMARY KEY - Khoa chinh
+	-- FOREIGN KEY() - Khoa ngoai
+	-- Kieu du lieu: - nvarchar(20) - Dat chu N truoc string tieng viet
+					 -- int, date, 
+-- DROP TABLE - Xoa bang
+-- ALTER TABLE - Thay doi cau truc cua bang
+	-- ADD - Them cot
+	-- DROP COLUMN - Xoa cot
+	-- FOREIGN KEY, CHECK
+
+-- SELECT - Truy van du lieu
+	-- WHERE - Dieu kien truy van
+	-- ORDER BY - Sap xep ket qua truy van
+	-- GROUP BY - Nhom du lieu
+		-- Su dung AGGREATE FUNCTION doi voi nhung cot khong duoc GROUP BY
+			-- SUM - Tinh tong cac ban ghi trong cot
+			-- COUNT - Dem so luong cac ban ghi trong cot
+			-- MIN - Lay ra ban ghi co gia tri be nhat
+			-- MAX - Lay ra ban ghi co gia tri lon nhat
+			-- AVG - Tinh gia tri trung binh cua cot
+	-- HAVING -- Dieu kien truy van cua GROUP BY
+	-- JOIN: - INNER JOIN -- Noi trong
+			 -- LEFT JOIN - Noi Trai
+			 -- RIGHT JOIN - Noi phai
+			 -- FULL OUTER JOIN - Noi toan bo
+-- UPDATE - Cap nhat du lieu
+-- DELETE - Xoa du leiu
+-- INSERT INTO - Them du lieu vao bang
+
