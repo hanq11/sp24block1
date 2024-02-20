@@ -1,0 +1,125 @@
+USE QuanLyMonHoc;
+
+-- CREATE TABLE - Tao bang
+	-- IDENTITY(1,1) - Dat id tang dan, bat dau tu 1
+	-- PRIMARY KEY - Khoa chinh
+	-- FOREIGN KEY() - Khoa ngoai
+	-- Kieu du lieu: - nvarchar(20) - Dat chu N truoc string tieng viet
+					 -- int, date, 
+-- DROP TABLE - Xoa bang
+-- ALTER TABLE - Thay doi cau truc cua bang
+	-- ADD - Them cot
+	-- DROP COLUMN - Xoa cot
+	-- FOREIGN KEY, CHECK
+
+-- SELECT - Truy van du lieu
+	-- WHERE - Dieu kien truy van
+	-- ORDER BY - Sap xep ket qua truy van
+	-- GROUP BY - Nhom du lieu
+		-- Su dung AGGREATE FUNCTION doi voi nhung cot khong duoc GROUP BY
+			-- SUM - Tinh tong cac ban ghi trong cot
+			-- COUNT - Dem so luong cac ban ghi trong cot
+			-- MIN - Lay ra ban ghi co gia tri be nhat
+			-- MAX - Lay ra ban ghi co gia tri lon nhat
+			-- AVG - Tinh gia tri trung binh cua cot
+	-- HAVING -- Dieu kien truy van cua GROUP BY
+	-- JOIN: - INNER JOIN -- Noi trong
+			 -- LEFT JOIN - Noi Trai
+			 -- RIGHT JOIN - Noi phai
+			 -- FULL OUTER JOIN - Noi toan bo
+-- UPDATE - Cap nhat du lieu
+-- DELETE - Xoa du leiu
+-- INSERT INTO - Them du lieu vao bang
+
+SELECT * FROM GiangVien
+WHERE SoDienThoai = '';
+
+SELECT 1 + 1 AS 'Ket qua'
+SELECT * FROM MonHoc;
+SELECT (MaGiangVien * SoTinChi) AS 'Ket Qua' FROM MonHoc
+
+--
+CREATE DATABASE BanHang;
+USE BanHang;
+
+CREATE TABLE SanPham(
+	MaSanPham varchar(5) PRIMARY KEY,
+	TenSanPham nvarchar(50),
+	GiaHienHanh int,
+	SoLuongTon int
+)
+
+CREATE TABLE HoaDon(
+	MaHoaDon varchar(5) PRIMARY KEY,
+	NgayLap date,
+	SoDienThoai varchar(20)
+)
+
+CREATE TABLE HoaDonChiTiet(
+	MaSanPham varchar(5),
+	MaHoaDon varchar(5),
+	SoLuongMua int,
+	GiaMua int,
+	FOREIGN KEY(MaSanPham) REFERENCES SanPham(MaSanPham),
+	FOREIGN KEY(MaHoaDon) REFERENCES HoaDon(MaHoaDon),
+	PRIMARY KEY(MaSanPham, MaHoaDon)
+)
+
+INSERT INTO SanPham
+	(MaSanPham, TenSanPham, GiaHienHanh, SoLuongTon)
+VALUES
+	('SP001',N'LaptopDellXPS',2500,15),
+	('SP002',N'SmartphoneiPhone13',3200,20),
+	('SP003',N'ĐiềuhòaPanasonic',1200,10),
+	('SP004',N'SmartphoneSamsung',2000,11);
+SELECT * FROM SanPham
+
+INSERT INTO HoaDon
+	(MaHoaDon, NgayLap, SoDienThoai)
+VALUES
+	('HD001','2023-02-15',123456),
+	('HD002','2023-02-16',234567),
+	('HD003','2023-02-17',NULL),
+	('HD004','2023-02-19',345678);
+SELECT * FROM HoaDon
+
+INSERT INTO HoaDonChiTiet
+	(MaSanPham, MaHoaDon, SoLuongMua, GiaMua)
+VALUES
+	('SP001','HD001',2,2500),
+	('SP002','HD002',1,3200),
+	('SP003','HD003',3,1200),
+	('SP003','HD004',1,1100);
+SELECT * FROM HoaDonChiTiet;
+
+-- Yeu cau 3
+SELECT * FROM SanPham
+WHERE TenSanPham LIKE '%Dell%';
+-- Yeu cau 4
+SELECT * FROM HoaDon
+WHERE SoDienThoai IS NULL;
+-- Yeu cau 5
+SELECT hdct.MaHoaDon, sp.TenSanPham
+	, hdct.SoLuongMua, hdct.GiaMua
+	, (hdct.SoLuongMua * hdct.GiaMua) AS 'Thanh Tien'
+FROM HoaDonChiTiet hdct
+INNER JOIN SanPham sp ON hdct.MaSanPham = sp.MaSanPham
+-- Yeu cau 6
+SELECT sp.TenSanPham, hdct.GiaMua, hd.NgayLap
+FROM SanPham sp
+INNER JOIN HoaDonChiTiet hdct ON sp.MaSanPham = hdct.MaSanPham
+INNER JOIN HoaDon hd ON hd.MaHoaDon = hdct.MaHoaDon
+ORDER BY hd.NgayLap DESC
+-- Yeu cau 7
+UPDATE SanPham
+SET SoLuongTon = 0
+WHERE MaSanPham = (
+	SELECT MaSanPham 
+	FROM SanPham 
+	WHERE TenSanPham LIKE '%Samsung'
+)
+SELECT * FROM SanPham
+-- Yeu cau 8
+DELETE 
+FROM SanPham
+WHERE SoLuongTon = 0
