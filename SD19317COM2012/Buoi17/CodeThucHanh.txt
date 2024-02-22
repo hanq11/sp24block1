@@ -1,0 +1,111 @@
+-- Yeu cau 1
+CREATE DATABASE ThiThuBuoi4;
+
+USE ThiThuBuoi4;
+
+--SinhVien(MaSV, HoTen, NgaySinh, DiemTongKet)
+--MonHoc(MaMon, TenMon, SoTinChi)
+--KetQua(MaSV, MaMon, DiemThi)
+
+CREATE TABLE SinhVien(
+	MaSV varchar(10) PRIMARY KEY,
+	HoTen nvarchar(50) NOT NULL,
+	NgaySinh date,
+	DiemTongKet decimal(4,2)
+);
+
+CREATE TABLE MonHoc(
+	MaMon varchar(10) PRIMARY KEY,
+	TenMon nvarchar(50) NOT NULL,
+	SoTinChi int
+);
+
+CREATE TABLE KetQua(
+	MaSV varchar(10),
+	MaMon varchar(10),
+	DiemThi decimal(4,2) NOT NULL,
+	FOREIGN KEY(MaSV) REFERENCES SinhVien(MaSV),
+	FOREIGN KEY(MaMon) REFERENCES MonHoc(MaMon),
+	PRIMARY KEY(MaSV, MaMon)
+);
+
+-- Yeu cau 2
+INSERT INTO SinhVien
+	(MaSV, HoTen, NgaySinh, DiemTongKet)
+VALUES
+	('SV001',N'Nguyễn Văn A','2000-01-05',8.5),
+	('SV002',N'Trần Thị B','1999-03-15',7.2),
+	('SV003',N'Lê Văn C','2001-08-20',9.0),
+	('SV004',N'Tạ Văn D',NULL,6.0);
+SELECT * FROM SinhVien;
+
+INSERT INTO MonHoc
+	(MaMon, TenMon, SoTinChi)
+VALUES
+	('M001',N'Toán',3),
+	('M002',N'Văn',2),
+	('M003',N'Anh Văn',4);
+SELECT * FROM MonHoc;
+
+INSERT INTO KetQua
+	(MaSV, MaMon, DiemThi)
+VALUES
+	('SV001','M001',8.0),
+	('SV002','M003',7.0),
+	('SV003','M001',6.5),
+	('SV003','M002',8.7);
+SELECT * FROM KetQua;
+
+-- Yeu cau 3:
+SELECT * FROM SinhVien
+WHERE NgaySinh IS NULL;
+-- Yeu cau 4:
+SELECT * FROM SinhVien
+WHERE DiemTongKet > 8;
+-- Yeu cau 5: Hiển thị danh sách môn học và số sinh viên đăng ký môn đó 
+-- (số sinh viên có điểm thi)
+SELECT * FROM MonHoc;
+SELECT * FROM KetQua;
+INSERT INTO MonHoc
+	(MaMon, TenMon, SoTinChi)
+VALUES
+	('M004', N'Cơ sở dữ liệu', 5);
+
+SELECT mh.MaMon, mh.TenMon, COUNT(kq.MaSV) AS 'So sinh vien dang ky'
+FROM MonHoc mh
+LEFT JOIN KetQua kq ON mh.MaMon = kq.MaMon
+GROUP BY mh.MaMon, mh.TenMon
+
+-- Yeu cau 6: Hiển thị danh sách chi tiết kết quả của sinh viên gồm:
+-- Mã Sinh viên, Tên môn, và điểm trọng số (Điểm thi * Số tín chỉ)
+SELECT * FROM MonHoc;
+SELECT * FROM KetQua;
+
+SELECT kq.MaSV, mh.TenMon, (kq.DiemThi * mh.SoTinChi) AS 'Diem trong so'
+FROM KetQua kq
+INNER JOIN MonHoc mh ON kq.MaMon = mh.MaMon
+-- Yêu cầu 7: Hiển thị danh sách các sinh viên có 
+-- điểm thi môn "Toán" thấp hơn 7.0
+SELECT sv.HoTen, kq.DiemThi
+FROM SinhVien sv
+INNER JOIN KetQua kq ON sv.MaSV = kq.MaSV
+INNER JOIN MonHoc mh ON mh.MaMon = kq.MaMon
+WHERE mh.TenMon = 'Toán' AND kq.DiemThi < 7
+-- Yêu cầu 8: Viết câu lệnh cập nhật điểm thi của sinh viên "SV002" 
+-- môn "Anh Văn" thành 8.0
+UPDATE KetQua
+SET DiemThi = 8
+WHERE MaSV = 'SV002'
+	AND MaMon = (SELECT MaMon FROM MonHoc WHERE TenMon = N'Anh Văn')
+SELECT * FROM KetQua
+SELECT * FROM MonHoc
+-- Yêu cầu 9: Viết câu lệnh xóa sinh viên có điểm tổng kết dưới 7.0
+SELECT * FROM SinhVien;
+DELETE FROM SinhVien WHERE DiemTongKet < 7;
+-- Yêu cầu 10: Đếm số lần thi của mỗi sinh viên với điều kiện sinh viên
+-- thi trên 1 lần
+SELECT MaSV, COUNT(*) AS 'Số lần '
+FROM KetQua
+GROUP BY MaSV
+HAVING COUNT(*) > 1;
+
