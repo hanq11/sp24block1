@@ -1,0 +1,111 @@
+CREATE DATABASE ThiThuBuoi5;
+
+USE ThiThuBuoi5;
+
+--SanPham(MaSP, TenSP, DonGia, SoLuongTon)
+--DonHang(MaDH, NgayDat, MaKH)
+--ChiTietDonHang(MaSP, MaDH, SoLuong, GiaBan)
+-- Yeu cau 1
+CREATE TABLE SanPham(
+	MaSP varchar(10) PRIMARY KEY,
+	TenSP nvarchar(50) NOT NULL,
+	DonGia decimal(10,0),
+	SoLuongTon int
+);
+
+CREATE TABLE DonHang(
+	MaDH varchar(10) PRIMARY KEY,
+	NgayDat date NOT NULL,
+	MaKH varchar(10)
+);
+--ChiTietDonHang(MaSP, MaDH, SoLuong, GiaBan)
+CREATE TABLE ChiTietDonHang(
+	MaSP varchar(10),
+	MaDH varchar(10),
+	SoLuong int,
+	GiaBan decimal(10,0),
+	FOREIGN KEY(MaSP) REFERENCES SanPham(MaSP),
+	FOREIGN KEY(MaDH) REFERENCES DonHang(MaDH),
+	PRIMARY KEY(MaSP, MaDH)
+);
+
+-- Yeu cau 2:
+INSERT INTO SanPham
+	(MaSP, TenSP, DonGia, SoLuongTon)
+VALUES
+	('SP001', N'Laptop Dell XPS', 25000000,15),
+	('SP002', N'Smartphone iPhone 13', 32000000,20),
+	('SP003', N'Điều hòa Panasonic', 12000000,10);
+SELECT * FROM SanPham;
+
+INSERT INTO DonHang
+	(MaDH, NgayDat, MaKH)
+VALUES
+	('DH001', '2023-02-15', 'KH001'),
+	('DH002', '2023-02-16', 'KH002'),
+	('DH003', '2023-02-17', 'KH003');
+SELECT * FROM DonHang;
+
+INSERT INTO ChiTietDonHang
+	(MaSP, MaDH, SoLuong, GiaBan)
+VALUES
+	('SP001', 'DH001', 2, 50000000),
+	('SP002', 'DH001', 1, 32000000),
+	('SP003', 'DH002', 3, 12000000);
+
+SELECT * FROM ChiTietDonHang;
+
+-- Yeu cau 3: Hiển thị danh sách Sản phẩm gồm: Mã sản phẩm, Tên sản phẩm, Đơn giá.
+SELECT MaSP, TenSP, DonGia, SoLuongTon
+FROM SanPham;
+
+-- Yeu cau 4: Hiển thị danh sách Đơn hàng gồm: Mã đơn hàng, 
+-- Ngày đặt, Mã khách hàng cho các đơn hàng được đặt sau ngày '2023-02-15'.
+SELECT MaDH, NgayDat, MaKH
+FROM DonHang
+WHERE NgayDat > '2023-02-15';
+-- Yeu cau 5: Hiển thị thông tin Chi tiết Đơn hàng gồm: 
+--Mã sản phẩm, Mã đơn hàng, Số lượng, Giá bán 
+--cho các đơn hàng có Ngày đặt sau '2023-02-16'.
+SELECT ctdh.MaSP, ctdh.MaDH, ctdh.SoLuong, ctdh.GiaBan
+FROM ChiTietDonHang ctdh
+INNER JOIN DonHang dh ON ctdh.MaDH = dh.MaDH
+WHERE dh.NgayDat > '2023-02-16';
+--
+SELECT MaSP, MaDH, SoLuong, GiaBan
+FROM ChiTietDonHang
+WHERE MaDH IN (
+    SELECT MaDH
+    FROM DonHang
+    WHERE NgayDat > '2023-02-16'
+);
+-- Yeu cau 6: Hiển thị danh sách Sản phẩm và 
+-- Tổng số lượng bán được, 
+-- chỉ hiển thị những Sản phẩm có Tổng số lượng bán lớn hơn 5
+INSERT INTO ChiTietDonHang
+	(MaSP, MaDH, SoLuong, GiaBan)
+VALUES
+	('SP001', 'DH002', 4, 50000000);
+SELECT * FROm ChiTietDonHang;
+
+SELECT sp.MaSP, sp.TenSP, SUM(ctdh.SoLuong) AS 'So luong ban'
+FROM SanPham sp
+INNER JOIN ChiTietDonHang ctdh ON sp.MaSP = ctdh.MaSP
+GROUP BY sp.MaSP, sp.TenSP
+HAVING SUM(ctdh.SoLuong) > 5;
+
+-- Viết câu lệnh SQL để cập nhật Đơn giá của Sản phẩm 
+-- có Mã sản phẩm là 'SP001' thành 27000000.
+UPDATE SanPham
+SET DonGia = 27000000
+WHERE MaSP = 'SP001';
+
+SELECT * FROM SanPham WHERE MaSP = 'SP001';
+
+-- Yeu cau 8: Viết câu lệnh SQL để xóa các bản ghi 
+-- trong bảng ChiTietDonHang có Số lượng bằng 0.
+DELETE
+FROM ChiTietDonHang
+WHERE SoLuong = 0;
+
+SELECT * FROM ChiTietDonHang;
