@@ -1,0 +1,117 @@
+CREATE DATABASE ThiThuBuoi6;
+
+USE ThiThuBuoi6;
+
+--XeOto(MaXe, TenXe, HangSanXuat, MauSac)
+--TaiXe(MaTaiXe, HoTen, NgaySinh, GioiTinh)
+--LichTrinh(MaLichTrinh, MaXe, MaTaiXe, ThoiGianXuatPhat, DiemDen)
+-- Yeu cau 1: 
+CREATE TABLE XeOto(
+	MaXe varchar(10) PRIMARY KEY,
+	TenXe nvarchar(50) NOT NULL,
+	HangSanXuat nvarchar(20),
+	MauSac nvarchar(15)
+);
+
+CREATE TABLE TaiXe(
+	MaTaiXe varchar(10) PRIMARY KEY,
+	HoTen nvarchar(50) NOT NULL,
+	NgaySinh date,
+	GioiTinh nvarchar(10)
+);
+
+CREATE TABLE LichTrinh(
+	MaLichTrinh varchar(10) PRIMARY KEY,
+	MaXe varchar(10) NOT NULL,
+	MaTaiXe varchar(10) NOT NULL,
+	ThoiGianXuatPhat date,
+	DiemDen nvarchar(20),
+	FOREIGN KEY(MaXe) REFERENCES XeOto(MaXe),
+	FOREIGN KEY(MaTaiXe) REFERENCES TaiXe(MaTaiXe)
+);
+
+-- Yeu cau 2:
+INSERT XeOto
+	(MaXe, TenXe, HangSanXuat, MauSac)
+VALUES
+	('X001','Toyota Camry','Toyota',N'Đen'),
+	('X002','Honda Civic','Honda',N'Trắng'),
+	('X003','Mazda-CX5','Mazda',N'Trắng'),
+	('X004','Ford Ranger','Ford',N'Đỏ');
+SELECT * FROM XeOto;
+
+INSERT TaiXe
+	(MaTaiXe, HoTen, NgaySinh, GioiTinh)
+VALUES 
+	('TX001',N'Nguyen Van A','1990-01-15',N'Nam'),
+	('TX002',N'Le Thi B','1985-05-20',N'Nữ'),
+	('TX003',N'Tran Van C','1992-09-10',N'Nam'),
+	('TX004',N'Pham Thi D','1988-03-25',N'Nữ');
+SELECT * FROM TaiXe;
+
+INSERT LichTrinh
+	(MaLichTrinh, MaXe, MaTaiXe, ThoiGianXuatPhat, DiemDen)
+VALUES
+	('LT001','X001','TX001','2024-02-20','Ha Noi'),
+	('LT002','X002','TX002','2024-02-21','Hai Phong'),
+	('LT003','X003','TX003','2024-02-22','Da Nang'),
+	('LT004','X003','TX004','2024-02-23','Can Tho');
+SELECT * FROM LichTrinh;
+
+--Yêu cầu 3: Hiển thị danh sách các xe ô tô có tên chứa từ 
+--'Toyota' và thông tin về hãng sản xuất.
+SELECT *
+FROM XeOto
+WHERE TenXe LIKE '%Toyota%'
+--Yêu cầu 4: Liệt kê các tài xế có ngày sinh sau năm 1990.
+SELECT *
+FROM TaiXe
+WHERE YEAR(NgaySinh) > 1990;
+--Yêu cầu 5: Hiển thị các lịch trình 
+--xuất phát sau ngày 2023-01-01.
+SELECT *
+FROM LichTrinh
+WHERE ThoiGianXuatPhat > '2023-01-01'
+--Yêu cầu 6: Tìm kiếm thông tin lịch trình, 
+-- tên tài xế, thông tin ô tô có ngày xuất phát trước 2023-02-22
+SELECT lt.ThoiGianXuatPhat, lt.DiemDen,
+	xo.MaXe, xo.TenXe, xo.HangSanXuat, xo.MauSac,
+	tx.HoTen, tx.NgaySinh
+FROM LichTrinh lt
+INNER JOIN TaiXe tx ON lt.MaTaiXe = tx.MaTaiXe
+INNER JOIN XeOto xo ON xo.MaXe = lt.MaXe
+WHERE lt.ThoiGianXuatPhat < '2025-02-22'
+--Yêu cầu 7: Cập nhật thông tin về hãng sản xuất 
+--của xe Mazda thành Suzuki 
+SELECT * FROM XeOto;
+UPDATE XeOto
+SET HangSanXuat = 'Suzuki'
+WHERE TenXe LIKE '%Mazda%';
+--Yêu cầu 8: Xóa thông tin về tài xế không có lịch trình nào
+SELECT * FROM TaiXe;
+SELECT * FROM LichTrinh;
+INSERT INTO TaiXe VALUES ('TX005', 'Test', '2000-01-01', 'Nam');
+
+DELETE
+FROM TaiXe
+WHERE MaTaiXe NOT IN (SELECT DISTINCT MaTaiXe FROM LichTrinh);
+--Yêu cầu 9: Đếm số lượng các xe ô tô của mỗi hãng sản xuất.
+SELECT * FROM XeOTo;
+SELECT HangSanXuat, COUNT(MaXe) AS 'So Luong Xe'
+FROM XeOto
+GROUP BY HangSanXuat; 
+--Yêu cầu 10: Hiển thị danh sách ô tô và đếm số lịch trình 
+--của mỗi ô tô, chỉ hiện thị những ô tô có số lịch trình lớn hơn 1
+SELECT xo.MaXe, COUNT(lt.MaLichTrinh) AS 'So lich trinh'
+FROM LichTrinh lt
+INNER JOIN XeOto xo ON lt.MaXe = xo.MaXe
+GROUP BY xo.MaXe
+HAVING COUNT(lt.MaLichTrinh) > 1;
+--Yêu cầu 11: Hiển thị danh sách ô tô và 
+--đếm số lịch trình của mỗi ô tô, 
+--chỉ hiện thị những ô tô có màu ‘Trắng’
+SELECT xo.MaXe, COUNT(lt.MaLichTrinh) AS 'So lich trinh'
+FROM LichTrinh lt
+INNER JOIN XeOto xo ON lt.MaXe = xo.MaXe
+WHERE xo.MauSac = N'Trắng'
+GROUP BY xo.MaXe
