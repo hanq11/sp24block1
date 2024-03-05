@@ -10,7 +10,7 @@ SELECT ten_nhan_vien, dia_chi FROM nhan_vien;
 SELECT * FROM phong_ban;
 -- Truy van ten, ngay bat dau, ket thuc trong bang du an
 SELECT ten_du_an, ngay_bat_dau, ngay_ket_thuc FROM du_an;
-
+ 
 -- Nhan vien: ten_nhan_vien co dia chi la: dia_chi
 SELECT 
 	'Nhan vien: ' 
